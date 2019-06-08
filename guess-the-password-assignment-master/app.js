@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   const wordCount = 10;
-  const guessCount = 4;
+  let guessCount = 4;
   let password = '';
 
   const start = document.getElementById('start');
@@ -10,19 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
     startGame();
   });
 
-  function toggleClasses(element) {
-    for (var i = 1; i < arguments.length; i++) {
-      element.classList.toggle(arguments[i]);
+  function toggleClasses(element, ...args) {
+    for (var arg of args) {
+      element.classList.toggle(arg);
     }
   }
 
   function startGame() {
     // get random words and append them to the DOM
-    var wordList = document.getElementById('word-list');
+    const wordList = document.getElementById('word-list');
     // 'words' variable is from words.js
-    var randomWords = getRandomValues(words, wordCount); // eslint-disable-line no-undef
-    randomWords.forEach(function(word) {
-      var li = document.createElement('li');
+    const randomWords = getRandomValues(words, wordCount); // eslint-disable-line no-undef
+    randomWords.forEach((word) => {
+      const li = document.createElement('li');
       li.innerText = word;
       wordList.appendChild(li);
     });
@@ -46,9 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var idx2 = Math.floor(Math.random() * (idx1 + 1));
 
       // swap elements at idx1 and idx2
-      var temp = arrayCopy[idx1];
-      arrayCopy[idx1] = arrayCopy[idx2];
-      arrayCopy[idx2] = temp;
+      [arrayCopy[idx1], arrayCopy[idx2]] = [arrayCopy[idx2], arrayCopy[idx1]];
+
     }
     return arrayCopy;
   }

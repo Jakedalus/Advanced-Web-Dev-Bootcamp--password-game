@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var wordCount = 10;
-  var guessCount = 4;
-  var password = '';
+  const wordCount = 10;
+  const guessCount = 4;
+  let password = '';
 
-  var start = document.getElementById('start');
-  start.addEventListener('click', function() {
+  const start = document.getElementById('start');
+  start.addEventListener('click', () => {
     toggleClasses(document.getElementById('start-screen'), 'hide', 'show');
     toggleClasses(document.getElementById('game-screen'), 'hide', 'show');
     startGame();
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function shuffle(array) {
-    var arrayCopy = array.slice();
+    let arrayCopy = array.slice();
     for (var idx1 = arrayCopy.length - 1; idx1 > 0; idx1--) {
       // generate a random index between 0 and idx1 (inclusive)
       var idx2 = Math.floor(Math.random() * (idx1 + 1));
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateGame(e) {
     if (e.target.tagName === 'LI' && !e.target.classList.contains('disabled')) {
       // grab guessed word, check it against password, update view
-      var guess = e.target.innerText;
-      var similarityScore = compareWords(guess, password);
+      const guess = e.target.innerText;
+      const similarityScore = compareWords(guess, password);
       e.target.classList.add('disabled');
       e.target.innerText = guess + ' --> Matching Letters: ' + similarityScore;
       setGuessCount(guessCount - 1);
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (word1.length !== word2.length) {
       throw 'Words must have the same length';
     }
-    var count = 0;
+    let count = 0;
     for (var i = 0; i < word1.length; i++) {
       if (word1[i] === word2[i]) count++;
     }

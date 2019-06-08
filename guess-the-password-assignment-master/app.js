@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
   const wordCount = 10;
   let guessCount = 4;
   let password = '';
@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     startGame();
   });
 
-  function toggleClasses(element, ...args) {
-    for (var arg of args) {
-      element.classList.toggle(arg);
+  function toggleClasses(element, ...classNames) {
+    for (let className of classNames) {
+      element.classList.toggle(className);
     }
   }
 
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // get random words and append them to the DOM
     const wordList = document.getElementById('word-list');
     // 'words' variable is from words.js
-    const randomWords = getRandomValues(words, wordCount); // eslint-disable-line no-undef
+    const randomWords = getRandomValues(words); // eslint-disable-line no-undef
     randomWords.forEach((word) => {
       const li = document.createElement('li');
       li.innerText = word;
@@ -35,13 +35,11 @@ document.addEventListener('DOMContentLoaded', function() {
     wordList.addEventListener('click', updateGame);
   }
 
-  function getRandomValues(array, numberOfVals) {
-    return shuffle(array).slice(0, numberOfVals);
-  }
+  const getRandomValues = (array, numberOfVals=wordCount) => shuffle(array).slice(0, numberOfVals);
 
   function shuffle(array) {
     let arrayCopy = array.slice();
-    for (var idx1 = arrayCopy.length - 1; idx1 > 0; idx1--) {
+    for (let idx1 = arrayCopy.length - 1; idx1 > 0; idx1--) {
       // generate a random index between 0 and idx1 (inclusive)
       var idx2 = Math.floor(Math.random() * (idx1 + 1));
 
@@ -55,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
   function setGuessCount(newCount) {
     guessCount = newCount;
     document.getElementById('guesses-remaining').innerText =
-      'Guesses remaining: ' + guessCount + '.';
+      `Guesses remaining: ${guessCount}.`;
   }
 
   function updateGame(e) {
@@ -64,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const guess = e.target.innerText;
       const similarityScore = compareWords(guess, password);
       e.target.classList.add('disabled');
-      e.target.innerText = guess + ' --> Matching Letters: ' + similarityScore;
+      e.target.innerText = `${guess} --> Matching Letters: ${similarityScore}`;
       setGuessCount(guessCount - 1);
 
       // check whether the game is over
@@ -73,6 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
         this.removeEventListener('click', updateGame);
       } else if (guessCount === 0) {
         toggleClasses(document.getElementById('loser'), 'hide', 'show');
+        const theAnswer = document.createElement('p');
+        theAnswer.innerText = `The password was ${password}.`;
+        document.getElementById('loser').appendChild(theAnswer);
         this.removeEventListener('click', updateGame);
       }
     }
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
       throw 'Words must have the same length';
     }
     let count = 0;
-    for (var i = 0; i < word1.length; i++) {
+    for (let i = 0; i < word1.length; i++) {
       if (word1[i] === word2[i]) count++;
     }
     return count;
